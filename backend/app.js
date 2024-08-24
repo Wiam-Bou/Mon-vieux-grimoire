@@ -1,7 +1,7 @@
 const express = require('express'); // Importer le module express 
 const cors = require('cors');
 const mongoose = require("mongoose");
-
+const path = require('path');
 const bookRoutes = require('./routes/book'); //importer la route des books
 const userRoutes = require('./routes/user'); //importer la route des users
 
@@ -32,6 +32,7 @@ mongoose.connect(mongoUri)
 
 app.use('/api/books', bookRoutes);
 app.use('/api/auth', userRoutes);
+app.use('/images', express.static(path.join(__dirname,'images')));
 
  
     
