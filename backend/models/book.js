@@ -15,7 +15,8 @@ const bookSchema = mongoose.Schema({
     year: { type: Number, required: true },
     genre: { type: String, required: true },
     ratings: [ratingSchema], // Ajouter les évaluations comme tableau d'objets
-    averageRating: { type: Number, default: 0 } // Ajouter la note moyenne
+    averageRating: { type: Number, default: 0 } // La valeur par défaut ( si pas d'évaluation la note est 0)
+
 });
 
 module.exports = mongoose.model('Book', bookSchema); // Transformer en modèle utilisable

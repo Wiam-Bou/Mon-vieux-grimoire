@@ -1,21 +1,23 @@
 const multer = require('multer');
-const MIME_TYPES={
-'image/jpeg':'jpeg',
-'image/jpg':'jpg',
-'image/png':'png'
+
+// Configuration de `multer` pour utiliser la mémoire
+const storage = multer.memoryStorage();
+
+// Filtrage des fichiers pour n'accepter que certains types MIME
+const fileFilter = (req, file, callback) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+    if (allowedTypes.includes(file.mimetype)) {
+        callback(null, true);
+    } else {
+        callback(new Error('Le fichier n\'est pas valide. Seuls les fichiers JPG, JPEG, PNG et WEBP sont acceptés.'), false);
+    }
 };
 
+// Configuration de `multer` avec le stockage, le filtrage et les limites de taille
+const upload = multer({
+    storage: storage,
+    fileFilter: fileFilter,
+    limits: { fileSize: 15 * 1024 * 1024 } // Limite de taille des fichiers
+});
 
-const storage = multer.diskStorage({
-    destination: (req,file,callback) =>{
-        callback(null, 'images')
-    },
-    filename:(req,file,callback)=>{
-        const name = file.originalname.split(' ').join('_');
-        const extension = MIME_TYPES[file.mimetype];
-        callback(null, name + Date.now() + '_' + extension);
-
-    }
-})
-
-module.exports = multer({storage}).single('image');
+module.exports = upload;
